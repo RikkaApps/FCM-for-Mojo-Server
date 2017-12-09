@@ -7,7 +7,7 @@ var config = require('../config');
 
 var push = require('./push');
 
-var version = require('./package.json').version;
+var version = require('../package.json').version;
 
 var FFMConfig = require('./ffm-config');
 var ffmConfig = new FFMConfig(config.client_config);

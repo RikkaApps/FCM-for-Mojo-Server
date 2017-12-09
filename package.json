@@ -2,14 +2,16 @@
   "name": "ffm",
   "version": "0.5.1",
   "description": "FFM",
-  "main": "index.js",
+  "main": "node/index.js",
   "dependencies": {
     "http-auth": "^3.2.3",
     "http-proxy": "^1.16.2",
     "request": "^2.81.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node node/index.js",
+    "sync": "git pull --rebase --stat origin master"
   },
   "repository": {
     "type": "git",
