@@ -21,12 +21,13 @@ var debug = config.debug || false;
 
 console.dir(ffmConfig.ids);
 
-process.on('exit', function () {
+function exitHandler () {
     // TODO push to client server exited
     console.log("[FFM] exit");
     mojoQQ.kill('SIGTERM');
-});
-
+}
+process.on('exit', exitHandler);
+process.on('SIGINT', exitHandler);
 
 var proxy = httpProxy.createProxyServer({
     proxyTimeout: 3000
