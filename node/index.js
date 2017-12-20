@@ -24,7 +24,7 @@ console.dir(ffmConfig.ids);
 process.on('exit', function () {
     // TODO push to client server exited
     console.log("[FFM] exit");
-    mojoQQ.kill('SIGINT');
+    mojoQQ.kill('SIGTERM');
 });
 
 
@@ -98,7 +98,7 @@ function handle(req, res) {
         case '/ffm/stop':
             res.writeHead(200, {"Content-Type": "application/json"});
             res.end(JSON.stringify({
-                code: mojoQQ.kill('SIGINT') ? 1 :0
+                code: mojoQQ.kill('SIGTERM') ? 1 :0
             }));
             break;
         case '/ffm/get_qr_code':
