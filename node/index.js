@@ -21,12 +21,13 @@ var debug = config.debug || false;
 
 console.dir(ffmConfig.ids);
 
-process.on('exit', function () {
+function exitHandler () {
     // TODO push to client server exited
     console.log("[FFM] exit");
-    mojoQQ.kill('SIGINT');
-});
-
+    mojoQQ.kill('SIGTERM');
+}
+process.on('exit', exitHandler);
+process.on('SIGINT', exitHandler);
 
 var proxy = httpProxy.createProxyServer({
     proxyTimeout: 3000
@@ -98,7 +99,7 @@ function handle(req, res) {
         case '/ffm/stop':
             res.writeHead(200, {"Content-Type": "application/json"});
             res.end(JSON.stringify({
-                code: mojoQQ.kill('SIGINT') ? 1 :0
+                code: mojoQQ.kill('SIGTERM') ? 1 :0
             }));
             break;
         case '/ffm/get_qr_code':
