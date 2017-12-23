@@ -23,7 +23,6 @@ function Push() {
           key = 'AAAAmZeUrRQ:APA91bF3WvP23diPgqBMDIZmX79sj6YtUsQdGp94IUeFZ97VFobYhWiFFc7Z-52nLbNNQjOSDwZfG8rVg1MGeF8Ygrmv8XWRC__24RCeOwpcDc-4OpcL9pK1pjGnVpFDjGeP6QrS6Fhb';
         } else {
           console.error("[FFM] start failed, please check key in config.js");
-          return false;
         }
     }
 
