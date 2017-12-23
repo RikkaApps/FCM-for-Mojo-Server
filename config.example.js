@@ -17,6 +17,9 @@ var config = {
     // http server port for client
     "port": 5005,
 
+    // set "Rikka" to use original FFM, or "Lollipop" to use FFM-L
+    "FCM_key": "Rikka",
+
     // hostname, 0.0.0.0 default (IPv4)
     /*"hostname": "",*/
 
