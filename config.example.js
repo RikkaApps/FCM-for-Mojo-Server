@@ -17,6 +17,9 @@ var config = {
     // http server port for client
     "port": 5005,
 
+    // set "Original" or comment this line to use original FFM, or "Lollipop" to use FFM-L
+    "FCM_key": "Original",
+
     // hostname, 0.0.0.0 default (IPv4)
     /*"hostname": "",*/
 

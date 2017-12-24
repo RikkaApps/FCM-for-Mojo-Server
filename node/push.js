@@ -1,4 +1,5 @@
 var request = require('request');
+var config = require('../config');
 
 function Push() {
 
@@ -14,7 +15,17 @@ function Push() {
         }
     }
 
-    this.key = 'AAAABvjXwsM:APA91bF0X8YKcyTJcUdTLB1lc6Xb-03eIHCLy7PKHCwVYCL6XqEB7eS8o3i0amPOPi-R4i_ldlVtnPcYLtf4DwS4qgTi5Ra8Uyl9pGT02iJDE9Ovc-5dUoNSpgWUUZPn0KN2gJjeYLhO';
+    if (config.FCM_key === "Original" || config.FCM_key === undefined) {
+      this.key = 'AAAABvjXwsM:APA91bF0X8YKcyTJcUdTLB1lc6Xb-03eIHCLy7PKHCwVYCL6XqEB7eS8o3i0amPOPi-R4i_ldlVtnPcYLtf4DwS4qgTi5Ra8Uyl9pGT02iJDE9Ovc-5dUoNSpgWUUZPn0KN2gJjeYLhO';
+    } else {
+        if (config.FCM_key === "Lollipop") {
+          this.key = 'AAAAmZeUrRQ:APA91bF3WvP23diPgqBMDIZmX79sj6YtUsQdGp94IUeFZ97VFobYhWiFFc7Z-52nLbNNQjOSDwZfG8rVg1MGeF8Ygrmv8XWRC__24RCeOwpcDc-4OpcL9pK1pjGnVpFDjGeP6QrS6Fhb';
+        } else {
+	  this.key = 'AAAABvjXwsM:APA91bF0X8YKcyTJcUdTLB1lc6Xb-03eIHCLy7PKHCwVYCL6XqEB7eS8o3i0amPOPi-R4i_ldlVtnPcYLtf4DwS4qgTi5Ra8Uyl9pGT02iJDE9Ovc-5dUoNSpgWUUZPn0KN2gJjeYLhO';
+          console.warn("[FFM] Value of FCM_key in config.js is invalid, use original FCM key to instead");
+        }
+    }
+
     this.options = {
         method: 'POST',
         url: 'https://fcm.googleapis.com/fcm/send',
