@@ -17,6 +17,10 @@ var config = {
     // http server port for client
     "port": 5005,
 
+    // Specified the FCM FCM
+    // For example, specified FFM-L key:
+    // "FCM_key": 'AAAABvjXwsM:APA91bF0X8YKcyTJcUdTLB1lc6Xb-03eIHCLy7PKHCwVYCL6XqEB7eS8o3i0amPOPi-R4i_ldlVtnPcYLtf4DwS4qgTi5Ra8Uyl9pGT02iJDE9Ovc-5dUoNSpgWUUZPn0KN2gJjeYLhO'
+
     // hostname, 0.0.0.0 default (IPv4)
     /*"hostname": "",*/
 
