@@ -19,7 +19,7 @@ sub call {
             $chat{message}{content}   = $msg->content;
             $chat{message}{timestamp} = $msg->time;
 			
-			if ($client->user->uid eq $msg->sender->uid) {
+			if ($client->user->id eq $msg->sender->id) {
 				return;
 			}
 			
