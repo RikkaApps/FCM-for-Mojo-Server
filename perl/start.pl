@@ -1,6 +1,7 @@
 ﻿#!/usr/bin/env perl
 
 use Getopt::Long;
+use Digest::MD5;
 use Mojo::Webqq;
 use lib './perl';
 
@@ -12,7 +13,16 @@ GetOptions(
     "openqq-port=i" => \$openqq_port,
 ) or die("Error in command line arguments\n");
 
+sub readPwd{
+    open my $file, '<', "password.dat";
+    my $pwd = <$file>;
+    close $file;
+    chomp $pwd;
+    return $pwd;
+}
+
 my $client = Mojo::Webqq->new(
+	pwd                    => readPwd(),
     log_encoding           => 'utf8',
     poll_failure_count_max => 20,
     account                => 'ffm',

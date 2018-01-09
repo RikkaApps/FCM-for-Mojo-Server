@@ -1,6 +1,11 @@
 #### 配置方式
 使用 `npm start` 来开启，默认占用 3 个端口号 5003 5004 5005。若要修改端口号，请自行修改 `config.js`，其他内容（HTTPS，HTTP 基本验证等的设置方式）请看 [这里](https://github.com/RikkaApps/FCM-for-Mojo#%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95) 。
 
+#### 安装注意
+为了完整的使用体验，在安装完Mojo::Webqq后请[点击此处安装Webqq::Encrption](https://github.com/sjdy521/Webqq-Encryption)
+安装完后请在shell下通过echo -n <qq 密码>|md5sum或者使用其他工具生成QQ密码的MD5值
+之后请在当前目录下创建password.dat，以上述生成的md5作为内容，而后进行其他配置
+
 #### 文件们的作用
 * `config.js`
 
