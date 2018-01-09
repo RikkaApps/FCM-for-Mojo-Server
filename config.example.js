@@ -4,7 +4,9 @@ var config = {
     "mojo": {
         "webqq": {
             // openqq plugin local port
-            "openqq": 5003
+            "openqq": 5003,
+            // qq password
+            "passwd": "passsword"
         }
     },
 

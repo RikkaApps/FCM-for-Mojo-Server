@@ -15,7 +15,7 @@ var ffmConfig = new FFMConfig(config.client_config);
 push.ids = ffmConfig.ids;
 
 var MojoQQ = require('./mojo-webqq');
-var mojoQQ = new MojoQQ(config.local_port, config.mojo.webqq.openqq);
+var mojoQQ = new MojoQQ(config.local_port, config.mojo.webqq.openqq, config.mojo.webqq.passwd);
 
 var debug = config.debug || false;
 
