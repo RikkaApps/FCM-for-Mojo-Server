@@ -1,4 +1,4 @@
-var request = require('request');
+const request = require('request');
 
 function Push() {
 
@@ -32,7 +32,7 @@ function Push() {
             return
         }
 
-        var body = {
+        const body = {
             data: data,
             priority: 'high',
             registration_ids: this.ids

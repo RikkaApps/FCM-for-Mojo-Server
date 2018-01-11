@@ -1,35 +1,39 @@
-var http = require('http');
-var https = require('https');
-var httpProxy = require('http-proxy');
-var auth = require('http-auth');
-var fs = require('fs');
-var config = require('../config');
+const http = require('http');
+const https = require('https');
+const httpProxy = require('http-proxy');
+const auth = require('http-auth');
+const fs = require('fs');
+const config = require('../config');
 
-var push = require('./push');
+const push = require('./push');
 
-var version = require('../package.json').version;
+const version = require('../package.json').version;
 
-var FFMConfig = require('./ffm-config');
-var ffmConfig = new FFMConfig(config.client_config);
+const FFMConfig = require('./ffm-config');
+const ffmConfig = new FFMConfig(config.client_config);
 
 push.ids = ffmConfig.ids;
 
-var MojoQQ = require('./mojo-webqq');
-var mojoQQ = new MojoQQ(config.local_port, config.mojo.webqq.openqq, config.mojo.webqq.passwd);
+const MojoQQ = require('./mojo-webqq');
+const mojoQQ = new MojoQQ(config.local_port, config.mojo.webqq.openqq, ffmConfig.data.passwd);
 
-var debug = config.debug || false;
+const debug = config.debug || false;
 
-console.dir(ffmConfig.ids);
+console.log("[FFM] ids = " + ffmConfig.ids.toString());
 
-function exitHandler () {
+process.on('exit', () => {
     // TODO push to client server exited
     console.log("[FFM] exit");
-    mojoQQ.kill('SIGTERM');
-}
-process.on('exit', exitHandler);
-process.on('SIGINT', exitHandler);
+    mojoQQ.kill(/*'SIGINT'*/);
+    process.exit();
+});
 
-var proxy = httpProxy.createProxyServer({
+process.on('SIGINT', () => {
+    console.log('[FFM] Received SIGINT.');
+    process.exit();
+});
+
+const proxy = httpProxy.createProxyServer({
     proxyTimeout: 3000
 });
 
@@ -48,13 +52,14 @@ proxy.on('error', function(err, req, res) {
 });
 
 function handle(req, res) {
-    var data = ffmConfig.data;
+    const data = ffmConfig.data;
     switch (req.url) {
         case '/ffm/send':
         case '/ffm/update_registration_ids':
         case '/ffm/update_notifications_toggle':
         case '/ffm/update_group_whitelist':
         case '/ffm/update_discuss_whitelist':
+        case '/ffm/update_password':
             handlePost(req, res);
             break;
 
@@ -99,7 +104,7 @@ function handle(req, res) {
         case '/ffm/stop':
             res.writeHead(200, {"Content-Type": "application/json"});
             res.end(JSON.stringify({
-                code: mojoQQ.kill('SIGTERM') ? 1 :0
+                code: mojoQQ.kill() ? 1 :0
             }));
             break;
         case '/ffm/get_qr_code':
@@ -113,6 +118,11 @@ function handle(req, res) {
                 res.writeHead(200, {"Content-Type": "image/png"});
                 res.end(buf, 'binary');
             });
+            break;
+
+        case '/ffm/get_password':
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(JSON.stringify(data.passwd));
             break;
         default:
             if (req.url.indexOf('/openqq') === 0) {
@@ -129,8 +139,9 @@ function handle(req, res) {
 }
 
 function handlePost(req, res) {
+    let body;
     if (req.method === 'POST') {
-        var body = '';
+        body = '';
     } else {
         res.writeHead(403, {
             'Content-Type': 'text/plain'
@@ -187,6 +198,16 @@ function onPostEnd(req, res, body) {
                 console.log('[FFM] new discuss whitelist ' + JSON.stringify(body));
             }
             break;
+        case '/ffm/update_password':
+            ffmConfig.data.passwd = body;
+            ffmConfig.save();
+
+            mojoQQ.passwd = body.passwd;
+
+            if (debug) {
+                console.log('[FFM] new passwd ' + JSON.stringify(body));
+            }
+            break;
         default:
             res.writeHead(403, {
                 'Content-Type': 'text/plain'
@@ -201,15 +222,15 @@ function onPostEnd(req, res, body) {
 }
 
 function onSendMessage(body) {
-    var type = body.type;
-    var isAt = false;
+    const type = body.type;
+    let isAt = false;
     if (type === 1 || type === 2) {
         isAt = body.message.isAt === 1;
     }
 
     // 好友及群组开关
-    var friend = ffmConfig.data.notifications.friend;
-    var group = ffmConfig.data.notifications.group;
+    const friend = ffmConfig.data.notifications.friend;
+    const group = ffmConfig.data.notifications.group;
 
     if ((type === 1 || type === 2) && (group === false && (!isAt || friend === false))) {
         if (debug) {
@@ -227,7 +248,7 @@ function onSendMessage(body) {
         return;
     }
 
-    var group_whitelist = ffmConfig.data.group_whitelist;
+    const group_whitelist = ffmConfig.data.group_whitelist;
     if (type === 1 && !isAt && group_whitelist.enabled && group_whitelist.list.indexOf(body.uid) === -1) {
         if (debug) {
             console.log('[FFM] do not send "' + body.message.content + '", because group is not in whitelist.')
@@ -236,7 +257,7 @@ function onSendMessage(body) {
         return;
     }
 
-    var discuss_whitelist = ffmConfig.data.discuss_whitelist;
+    const discuss_whitelist = ffmConfig.data.discuss_whitelist;
     if (type === 2 && !isAt && discuss_whitelist.enabled && discuss_whitelist.list.indexOf(body.name) === -1) {
         if (debug) {
             console.log('[FFM] do not send "' + body.message.content + '", because discuss is not in whitelist.')
@@ -248,13 +269,13 @@ function onSendMessage(body) {
     push.send(body);
 }
 
-var requestListener = function(req, res) {
+const requestListener = function(req, res) {
     console.log("[FFM] " + req.url);
 
     handle(req, res);
 };
 
-var httpsOptions;
+let httpsOptions;
 if (config.https !== undefined) {
     httpsOptions = config.https;
     console.log('[FFM] https configuration found');
@@ -262,7 +283,7 @@ if (config.https !== undefined) {
     console.log('[FFM] no https configuration found');
 }
 
-var server;
+let server;
 if (config.basic_auth === undefined) {
     console.log('[FFM] no basic auth configuration found');
     if (httpsOptions !== undefined) {
@@ -272,7 +293,7 @@ if (config.basic_auth === undefined) {
     }
 } else {
     console.log('[FFM] using basic auth, passwd file: ' + config.basic_auth.file);
-    var basic = auth.basic(config.basic_auth);
+    const basic = auth.basic(config.basic_auth);
     if (httpsOptions !== undefined) {
         server = https.createServer(basic, httpsOptions, requestListener);
     } else {

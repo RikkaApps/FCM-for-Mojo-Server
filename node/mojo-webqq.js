@@ -1,5 +1,5 @@
-var spawn = require('child_process').spawn;
-var path = require('path');
+const spawn = require('child_process').spawn;
+const path = require('path');
 
 function MojoQQ(port, openqq_port, passwd) {
     this.proc = null;
@@ -11,12 +11,16 @@ function MojoQQ(port, openqq_port, passwd) {
         if (!this.running()) {
             console.log("[FFM] starting Mojo-Webqq...");
 
-            var cmd = 'perl';
-            var args = [path.resolve(__dirname, '..') + '/perl/start.pl', '--node-port=' + this.port, '--openqq-port=' + this.openqq_port, '--passwd=' + this.passwd];
+            const cmd = 'perl';
+            const args = [path.resolve(__dirname, '..') + '/perl/start.pl', '--node-port=' + this.port, '--openqq-port=' + this.openqq_port];
+            if (this.passwd) {
+                args.push('--passwd=' + this.passwd.raw);
+            }
+            console.log("[FFM] start Mojo-Webqq... args=" + args.toString());
 
             this.proc = spawn(cmd, args, {stdio: "inherit"});
 
-            var mojoQQ = this;
+            const mojoQQ = this;
             this.proc.on('exit', function () {
                 console.log("[FFM] Mojo-Webqq exit");
 
@@ -31,6 +35,10 @@ function MojoQQ(port, openqq_port, passwd) {
     };
 
     this.kill = function(signal) {
+        if (!signal) {
+            signal = 'SIGTERM';
+        }
+
         if (this.running()) {
             this.proc.kill(signal);
             console.log("[FFM] killing Mojo-Webqq...");

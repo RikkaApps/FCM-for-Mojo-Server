@@ -1,7 +1,7 @@
-var fs = require('fs');
+const fs = require('fs');
 
 function FFMConfig(file) {
-    var self = this;
+    const self = this;
 
     this.file = file;
     if (fs.existsSync(file)) {
@@ -17,9 +17,9 @@ function FFMConfig(file) {
     this.makeIds = function () {
         self.ids = [];
 
-        var registration_ids = this.data.registration_ids;
+        const registration_ids = this.data.registration_ids;
         if (registration_ids !== undefined) {
-            for (var i = 0; i < registration_ids.length; i++) {
+            for (let i = 0; i < registration_ids.length; i++) {
                 self.ids.push(registration_ids[i]['id']);
             }
         }
@@ -30,7 +30,7 @@ function FFMConfig(file) {
     this.save = function () {
         self.makeIds();
 
-        var json = JSON.stringify(self.data);
+        const json = JSON.stringify(self.data);
         fs.writeFile(self.file, json, 'utf-8', function (err) {
             if (err) console.warn("[FFM] can't save plugin config file, " + err + " " + process.cwd());
             console.log('[FFM] plugin config file saved');
@@ -54,6 +54,11 @@ function FFMConfig(file) {
     this.data.discuss_whitelist = this.data.discuss_whitelist || {
         enabled: false,
         list: []
+    };
+
+    this.data.passwd = this.data.passwd || {
+        raw: null,
+        md5: null
     };
 
     //console.log('[FFM] ids: ' + this.ids);
