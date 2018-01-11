@@ -98,7 +98,7 @@ function handle(req, res) {
         case '/ffm/restart':
             res.writeHead(200, {"Content-Type": "application/json"});
             res.end(JSON.stringify({
-                code: mojoQQ.restart() ? 1 : 0
+                code: mojoQQ.restart(true) ? 1 : 0
             }));
             break;
         case '/ffm/stop':

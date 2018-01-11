@@ -7,7 +7,11 @@ function MojoQQ(port, openqq_port, passwd) {
     this.openqq_port = openqq_port;
     this.passwd = passwd;
 
-    this.restart = function() {
+    this.restart = function(force) {
+        if (force) {
+            this.kill();
+        }
+
         if (!this.running()) {
             console.log("[FFM] starting Mojo-Webqq...");
 
