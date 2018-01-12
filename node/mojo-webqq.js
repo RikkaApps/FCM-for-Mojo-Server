@@ -10,6 +10,7 @@ function MojoQQ(port, openqq_port, passwd) {
     this.restart = function(force) {
         if (force) {
             this.kill();
+            this.proc = null;
         }
 
         if (!this.running()) {
