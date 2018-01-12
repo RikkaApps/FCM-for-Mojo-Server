@@ -8,9 +8,19 @@ function MojoQQ(port, openqq_port, passwd) {
     this.passwd = passwd;
 
     this.restart = function(force) {
-        if (force) {
+        console.log("[FFM] restart called...");
+
+        if (force === true) {
+            console.log("[FFM] force kill old...");
+
             this.kill();
             this.proc = null;
+
+            const mojoQQ = this;
+            setTimeout(function() {
+                mojoQQ.restart(false);
+            }, 1000);
+            return true;
         }
 
         if (!this.running()) {

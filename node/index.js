@@ -21,11 +21,10 @@ const debug = config.debug || false;
 
 console.log("[FFM] ids = " + ffmConfig.ids.toString());
 
-process.on('exit', () => {
+process.on('exit', (code) => {
     // TODO push to client server exited
-    console.log("[FFM] exit");
+    console.log(`[FFM] exit with code: ${code}`);
     mojoQQ.kill(/*'SIGINT'*/);
-    process.exit();
 });
 
 process.on('SIGINT', () => {
@@ -202,7 +201,7 @@ function onPostEnd(req, res, body) {
             ffmConfig.data.passwd = body;
             ffmConfig.save();
 
-            mojoQQ.passwd = body.passwd;
+            mojoQQ.passwd = ffmConfig.data.passwd;
 
             if (debug) {
                 console.log('[FFM] new passwd ' + JSON.stringify(body));
