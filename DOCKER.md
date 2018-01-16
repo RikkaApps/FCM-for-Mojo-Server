@@ -31,13 +31,13 @@ docker pull kotomeinyan/fcm-for-mojo
 ### 方法二：手动创建 Docker 镜像（较新，慢速）
 
 ```
-docker build --pull --rm -t kotomeinyan/fcm-for-mojo github.com/RikkaW/FCM-for-Mojo-Server
+docker build --pull --rm -t kotomeinyan/fcm-for-mojo github.com/RikkaApps/FCM-for-Mojo-Server
 ```
 
 **TIPS:**  
 安装指定版本的服务端
 ```
-docker build --pull --rm -t kotomeinyan/fcm-for-mojo github.com/RikkaW/FCM-for-Mojo-Server#<version_tag>
+docker build --pull --rm -t kotomeinyan/fcm-for-mojo github.com/RikkaApps/FCM-for-Mojo-Server#<version_tag>
 ```
 
 ## 运行 Docker
