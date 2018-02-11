@@ -17,6 +17,9 @@ const config = {
     // http server port for client
     "port": 5005,
 
+    // http proxy, FFM will connect to Google FCM Server with this proxy if you set it.
+    //"push_proxy": 'http://127.0.0.1:8080',
+
     // hostname, 0.0.0.0 default (IPv4)
     /*"hostname": "",*/
 
