@@ -1,0 +1,14 @@
+[Unit]
+Description=FCM-for-Mojo Server
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+WorkingDirectory=/opt/FCM-for-Mojo-Server
+ExecStart=/usr/bin/npm start
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
