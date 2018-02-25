@@ -15,9 +15,9 @@ RUN \
         perl-crypt-openssl-rsa \
         perl-crypt-openssl-bignum \
     && apk add  --virtual .buildDeps-cpanm \
-        curl \
+        wget \
         make \
-    && curl -fsSL https://cpanmin.us | perl - App::cpanminus \
+    && wget --no-check-certificate -qO- https://cpanmin.us | perl - App::cpanminus \
     && cpanm \
         Mojo::Webqq \
         Webqq::Encryption \
