@@ -55,10 +55,13 @@ function FFMConfig(file) {
         enabled: false,
         list: []
     };
-
-    this.data.passwd = this.data.passwd || {
-        raw: null,
-        md5: null
+	
+	this.data.account = this.data.account || {
+		account: null,
+		passwd: {
+    	    raw: null,
+    	    md5: null
+    	}
     };
 
     //console.log('[FFM] ids: ' + this.ids);

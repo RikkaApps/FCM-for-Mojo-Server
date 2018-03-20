@@ -15,7 +15,7 @@ const ffmConfig = new FFMConfig(config.client_config);
 push.ids = ffmConfig.ids;
 
 const MojoQQ = require('./mojo-webqq');
-const mojoQQ = new MojoQQ(config.local_port, config.mojo.webqq.openqq, ffmConfig.data.passwd);
+const mojoQQ = new MojoQQ(config.local_port, config.mojo.webqq.openqq, ffmConfig.data.account);
 
 const debug = config.debug || false;
 
@@ -58,7 +58,7 @@ function handle(req, res) {
         case '/ffm/update_notifications_toggle':
         case '/ffm/update_group_whitelist':
         case '/ffm/update_discuss_whitelist':
-        case '/ffm/update_password':
+        case '/ffm/update_account':
             handlePost(req, res);
             break;
 
@@ -119,9 +119,9 @@ function handle(req, res) {
             });
             break;
 
-        case '/ffm/get_password':
+        case '/ffm/get_account':
             res.writeHead(200, {"Content-Type": "application/json"});
-            res.end(JSON.stringify(data.passwd));
+            res.end(JSON.stringify(data.account));
             break;
         default:
             if (req.url.indexOf('/openqq') === 0) {
@@ -197,14 +197,17 @@ function onPostEnd(req, res, body) {
                 console.log('[FFM] new discuss whitelist ' + JSON.stringify(body));
             }
             break;
-        case '/ffm/update_password':
-            ffmConfig.data.passwd = body;
+        case '/ffm/update_account':
+            ffmConfig.data.account = body;
             ffmConfig.save();
 
-            mojoQQ.passwd = ffmConfig.data.passwd;
+            mojoQQ.account = ffmConfig.data.account;
+
+            console.log('[FFM] new account ' + console.dir(ffmConfig.data.account));
+
 
             if (debug) {
-                console.log('[FFM] new passwd ' + JSON.stringify(body));
+                console.log('[FFM] new account ' + JSON.stringify(body));
             }
             break;
         default:
