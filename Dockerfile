@@ -25,6 +25,6 @@ RUN \
     && apk del .buildDeps-cpanm \
     && rm -rf /var/cache/apk/*
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
 CMD node node/index.js
 
