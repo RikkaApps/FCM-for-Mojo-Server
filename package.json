@@ -1,6 +1,6 @@
 {
   "name": "ffm",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "FFM",
   "main": "node/index.js",
   "dependencies": {

@@ -5,24 +5,27 @@ our $DESC     = '';
 our $PRIORITY = 97;
 
 sub call {
-    my $client = shift;
-    my $data   = shift;
+    my $client  = shift;
+    my $data    = shift;
     my $api_url = $data->{api_url};
-	
+
     $client->on(
         receive_message => sub {
             my ( $client, $msg ) = @_;
-			
+
             my %chat;
 
-            $chat{message}{sender}    = $msg->sender->displayname;
-            $chat{message}{content}   = $msg->content;
-            $chat{message}{timestamp} = $msg->time;
-			
-			if ($client->user->id eq $msg->sender->id) {
-				return;
-			}
-			
+            $chat{message}{sender_user}{name} = $msg->sender->displayname;
+            $chat{message}{sender_user}{id}   = $msg->sender->id;
+            $chat{message}{sender_user}{uid}  = $msg->sender->uid;
+            $chat{message}{sender}            = $msg->sender->displayname;
+            $chat{message}{content}           = $msg->content;
+            $chat{message}{timestamp}         = $msg->time;
+
+            if ( $client->user->id eq $msg->sender->id ) {
+                return;
+            }
+
             if ( $msg->is_at ) {
                 $chat{message}{isAt} = 1;
             }
@@ -66,7 +69,8 @@ sub call {
             $chat{message}{sender}    = $event;
             $chat{message}{timestamp} = time();
             if ( $event eq 'input_qrcode' ) {
-                print "[FFM] QRCode Link: http://localhost:5004/ffm/get_qr_code\n";
+                print
+                  "[FFM] QRCode Link: http://localhost:5004/ffm/get_qr_code\n";
                 $chat{message}{content} = "";
             }
 

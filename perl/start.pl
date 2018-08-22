@@ -23,6 +23,7 @@ my $client = Mojo::Webqq->new(
     login_type             => defined $account ? 'login' : 'qrlogin',
     account                => defined $account ? $account : 'ffm',
     qrcode_path            => '/tmp/mojo_webqq_qrcode_ffm.png',
+    is_update_group_member_ext => 1,
     pwd => defined $passwd ? Digest::MD5::md5_hex($passwd) : undef
 );
 
